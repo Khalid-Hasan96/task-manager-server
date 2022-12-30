@@ -12,7 +12,20 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const
+        const tasksCollection = client.db('task-manager').collection('tasks');
+
+        app.post('/tasks', async (req, res) => {
+            const task = req.body;
+            console.log(task)
+            const result = await tasksCollection.insertOne(task);
+            res.send(result)
+        });
+        app.get('/tasks', async (req, res) => {
+            const query = {};
+            const cursor = tasksCollection.find(query);
+            const tasks = await cursor.toArray();
+            res.send(tasks)
+        })
 
     }
     finally {
